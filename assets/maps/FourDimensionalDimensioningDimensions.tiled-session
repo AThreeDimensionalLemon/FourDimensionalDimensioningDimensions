@@ -1,0 +1,175 @@
+{
+    "activeFile": "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/Draft.tmx",
+    "expandedProjectPaths": [
+        ".",
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/FourDimensionalDimensioningDimensions",
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame",
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/FourDimensionalDimensioningDimensions/assets"
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "BlackSet.tmx": {
+            "scale": 0.29192708333333334,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1536.3425512934878,
+                "y": 318.5727029438002
+            }
+        },
+        "BrownSet.tmx": {
+            "scale": 0.41018229166666664,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1537.121452606184,
+                "y": 319.37019871754177
+            }
+        },
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/Draft.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 1264,
+                "y": 1296
+            }
+        },
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/Draft.tmx#fall_detail": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/Draft.tmx#fall_terrain": {
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/Draft.tmx#spring-summer-poi_detail": {
+            "scaleInEditor": 1
+        },
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/Draft.tmx#spring_terrain": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/Draft.tmx#spritesheet_detail_spring-summer-poi": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/Draft.tmx#summer_terrain": {
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/Draft.tmx#winter_detail": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/Draft.tmx#winter_terrain": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/StarterPlatformer/assets/platformer-level-1.tmx": {
+            "scale": 0.6861111111111111,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 326.47773279352225,
+                "y": 262.3481781376518
+            }
+        },
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/StarterPlatformer/assets/platformer-level-1.tmx#kenny_tilemap_packed": {
+            "scaleInDock": 1
+        },
+        "GreenSet.tmx": {
+            "scale": 0.41018229166666664,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1537.121452606184,
+                "y": 319.37019871754177
+            }
+        },
+        "PurpleSet.tmx": {
+            "scale": 0.41018229166666664,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 496.12088121389127,
+                "y": 368.12900768205196
+            }
+        },
+        "set_fall.tmx": {
+            "scale": 0.1574055989583333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1534.252921104333,
+                "y": 1222.955226967222
+            }
+        },
+        "set_spring.tmx": {
+            "scale": 0.1574055989583333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1534.252921104333,
+                "y": 1222.955226967222
+            }
+        },
+        "set_summer.tmx": {
+            "scale": 0.1574055989583333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1534.252921104333,
+                "y": 1222.955226967222
+            }
+        },
+        "set_winter.tmx": {
+            "scale": 0.1574055989583333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1534.252921104333,
+                "y": 1222.955226967222
+            }
+        },
+        "spritesheet.tsx": {
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "spritesheet_spring.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tilesheet.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/FourDimensionalDimensioningDimensions/assets/maps/SprSumPoiDetSprites",
+    "map.height": 10,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 64,
+    "map.tileWidth": 64,
+    "map.width": 48,
+    "openFiles": [
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/Draft.tmx"
+    ],
+    "project": "FourDimensionalDimensioningDimensions.tiled-project",
+    "recentFiles": [
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/PlatformerGame/Draft.tmx",
+        "C:/Users/Eisig Liang/Desktop/School/CMPM 120/StarterPlatformer/assets/platformer-level-1.tmx",
+        "spritesheet_spring.tsx",
+        "set_fall.tmx",
+        "set_winter.tmx",
+        "set_summer.tmx",
+        "set_spring.tmx",
+        "BlackSet.tmx",
+        "PurpleSet.tmx",
+        "BrownSet.tmx",
+        "GreenSet.tmx",
+        "spritesheet.tsx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 70,
+        "width": 70
+    },
+    "tileset.type": 1
+}
