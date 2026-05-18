@@ -1,8 +1,8 @@
 "use strict"
 
-const gameConfig = {
-    width: 1120,
-    height: 700,
+const game = new Phaser.Game({
+    width: 2240,
+    height: 1400,
     type: Phaser.CANVAS,
     parent: 'phaser-game',
     render: {
@@ -16,6 +16,4 @@ const gameConfig = {
     },
     autoCenter: Phaser.Scale.Center.CENTER_HORIZONTALLY,
     scene: [Level1]
-}
-
-const game = new Phaser.Game(gameConfig);
+});

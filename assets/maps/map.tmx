@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="96" height="20" tilewidth="70" tileheight="70" infinite="0" nextlayerid="16" nextobjectid="1">
+ <editorsettings>
+  <export target="map.json" format="json"/>
+ </editorsettings>
  <tileset firstgid="1" name="summer_terrain" tilewidth="70" tileheight="70" tilecount="49" columns="7">
   <image source="spritesheet_terrain_summer.png" width="512" height="512"/>
   <tile id="0">
