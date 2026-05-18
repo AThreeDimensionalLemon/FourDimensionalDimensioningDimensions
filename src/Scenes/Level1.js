@@ -3,12 +3,21 @@ class Level1 extends Phaser.Scene {
         super("level1");
     }
 
+    switchSet(targetIndexDifference) {
+        const setNames = [ "spring", "summer", "fall", "winter" ];
+        const currentIndex = setNames.indexOf(this.activeSet);
+        for (const layer in this.sets[this.activeSet].layers) {
+            if (this.sets[this.activeSet].layers[layer] != null) this.sets[this.activeSet].layers[layer].setVisible(false);
+        }
+        // TODO: Disable foreground collisions of set being switched from
+        this.activeSet = setNames[(currentIndex + targetIndexDifference + setNames.length) % setNames.length];
+        for (const layer in this.sets[this.activeSet].layers) {
+            if (this.sets[this.activeSet].layers[layer] != null) this.sets[this.activeSet].layers[layer].setVisible(true);
+        }
+        // TODO: Enable foreground collisions of set being switched to
+    }
+
     init() {
-
-        // configs
-        this.tileEdgeDimension = 70;
-
-        // scene members
         this.sets = {
             spring: {
                 terrainTileset: null,
@@ -42,7 +51,8 @@ class Level1 extends Phaser.Scene {
                     back: null
                 }
             }
-        }
+        };
+        this.activeSet = "spring";
     }
 
     preload() {
@@ -56,7 +66,7 @@ class Level1 extends Phaser.Scene {
         this.load.tilemapTiledJSON("map", "map.json");
 
         // queue to-be-loaded character assets
-        this.load.setPath("./assets/player")
+        this.load.setPath("./assets/player");
         // TODO: Animate player sprite; remember to add assets in create()
         // this.load.atlas("spritesheet_walk_player", "spritesheet_walk_player.png", "walk.json");
         this.load.image("tempSprite_walk_player");
@@ -65,7 +75,7 @@ class Level1 extends Phaser.Scene {
     create() {
 
         // create map visuals
-        this.map = this.add.tilemap("map", this.tileEdgeDimension, this.tileEdgeDimension, 96, 20);
+        this.map = this.add.tilemap("map");
         const detailTileset = this.map.addTilesetImage("detail", "spritesheet_detail");
         for (const set in this.sets) {
             const terrainTileset = this.map.addTilesetImage(`${set}_terrain`, `spritesheet_terrain_${set}`);
@@ -83,8 +93,6 @@ class Level1 extends Phaser.Scene {
                 }
             }
         }
-
-        // setup map functionality
 
         // create player sprite
         // TODO: Animate player sprite; remember to load assets in preload()
@@ -104,11 +112,29 @@ class Level1 extends Phaser.Scene {
         // setup camera
         this.cameras.main.setBounds(0, this.map.heightInPixels - game.config.height, game.config.width, game.config.height);
 
-        // create input keys
-        // this.inputs.keybord
+        // setup inputs
+        this.cursorKeys = this.input.keyboard.createCursorKeys();
+        this.cursorKeys.up.on("down", () => {
+            console.log("jump");
+            let targetSet = 0;
+            if (this.cursorKeys.left.isDown) targetSet = -1;
+            else if (this.cursorKeys.right.isDown) targetSet = 1;
+            else targetSet = 2;
+            this.switchSet(targetSet);
+        });
     }
 
     update() {
         
+        // handle player input
+        if(this.cursorKeys.left.isDown) {
+            // console.log("go left");
+        } 
+        else if(this.cursorKeys.right.isDown) {
+            // console.log("go right");
+        } 
+        else {      
+            // console.log("go nowhere");
+        }
     }
 }
