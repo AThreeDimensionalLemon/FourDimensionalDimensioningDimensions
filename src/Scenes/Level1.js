@@ -4,22 +4,33 @@ class Level1 extends Phaser.Scene {
     }
 
     switchSet(targetIndexDifference) {
-        const setNames = [ "spring", "summer", "fall", "winter" ];
-        const currentIndex = setNames.indexOf(this.activeSet);
         for (const layer in this.sets[this.activeSet].layers) {
             if (this.sets[this.activeSet].layers[layer] != null) this.sets[this.activeSet].layers[layer].setVisible(false);
         }
-        // TODO: Disable foreground collisions of set being switched from
+        this.sets[this.activeSet].collider.active = false;
+        const setNames = [ "spring", "summer", "fall", "winter" ];
+        const currentIndex = setNames.indexOf(this.activeSet);
         this.activeSet = setNames[(currentIndex + targetIndexDifference + setNames.length) % setNames.length];
         for (const layer in this.sets[this.activeSet].layers) {
-            if (this.sets[this.activeSet].layers[layer] != null) this.sets[this.activeSet].layers[layer].setVisible(true);
+            if (this.sets[this.activeSet].layers[layer] != null) this.sets[this.activeSet].layers[layer].setVisible(true); // TODO: Remove conditional statement after background layers are finished
         }
-        // TODO: Enable foreground collisions of set being switched to
+        this.sets[this.activeSet].collider.active = true;
     }
 
     init() {
+
+        // scene configs
+        this.movement = {
+            maxSpeed: 500,
+            acceleration: 500,
+            jumpVelocityMultiplier: 2.5, // multiplied with jump timer
+            drag: 1500
+        }
+
+        // scene members
         this.sets = {
             spring: {
+                collider: null,
                 terrainTileset: null,
                 layers: {
                     fore: null,
@@ -28,6 +39,7 @@ class Level1 extends Phaser.Scene {
                 }
             },
             summer: {
+                collider: null,
                 terrainTileset: null,
                 layers: {
                     fore: null,
@@ -36,6 +48,7 @@ class Level1 extends Phaser.Scene {
                 }
             },
             fall: {
+                collider: null,
                 terrainTileset: null,
                 layers: {
                     fore: null,
@@ -44,6 +57,7 @@ class Level1 extends Phaser.Scene {
                 }
             },
             winter: {
+                collider: null,
                 terrainTileset: null,
                 layers: {
                     fore: null,
@@ -53,6 +67,15 @@ class Level1 extends Phaser.Scene {
             }
         };
         this.activeSet = "spring";
+        this.timerStartValues = {
+            jumpHold: 500
+        }
+        this.timers = {
+            jumpHold: this.timerStartValues.jumpHold
+        }
+
+        // setup world
+        this.physics.world.gravity.y = 1500; // TODO: Get rid of this redundant call; theoretically already done in the instantiation of the game, but for some reason, this line is needed to make gravity go
     }
 
     preload() {
@@ -87,9 +110,9 @@ class Level1 extends Phaser.Scene {
             this.sets[set].layers.det = this.map.createLayer(`det_${set}`, detailTileset);
             this.sets[set].layers.fore = this.map.createLayer(`fore_${set}`, terrainTileset);
             this.sets[set].layers.fore.setCollisionByProperty({ collides: true });
-            if (set != "spring") {
+            if (set != this.activeSet) {
                 for (const layer in this.sets[set].layers) {
-                    if (this.sets[set].layers[layer] != null) this.sets[set].layers[layer].setVisible(false); // TODO: Remove conditional statement when background layers are finished
+                    if (this.sets[set].layers[layer] != null) this.sets[set].layers[layer].setVisible(false); // TODO: Remove conditional statement after background layers are finished
                 }
             }
         }
@@ -107,34 +130,49 @@ class Level1 extends Phaser.Scene {
         //     frameRate: 15,
         //     repeat: -1
         // });
-        this.add.sprite(game.config.width / 2, this.map.heightInPixels - game.config.height / 4, "tempSprite_walk_player");
-
+        this.playerSprite = this.physics.add.sprite(game.config.width / 2, this.map.heightInPixels - game.config.height / 4, "tempSprite_walk_player");
+        for (const set in this.sets) {
+            this.sets[set].collider = this.physics.add.collider(this.playerSprite, this.sets[set].layers.fore);
+            if (set != this.activeSet) this.sets[set].collider.active = false;
+        }
+        this.playerSprite.body.setMaxVelocityX(this.movement.maxSpeed);
+        
         // setup camera
         this.cameras.main.setBounds(0, this.map.heightInPixels - game.config.height, game.config.width, game.config.height);
 
         // setup inputs
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.cursorKeys.up.on("down", () => {
-            console.log("jump");
+            if (!this.playerSprite.body.onFloor()) return;
             let targetSet = 0;
             if (this.cursorKeys.left.isDown) targetSet = -1;
             else if (this.cursorKeys.right.isDown) targetSet = 1;
             else targetSet = 2;
             this.switchSet(targetSet);
         });
+        this.cursorKeys.up.on("up", () => {
+            if (this.playerSprite.body.onFloor()) return;
+            this.jumpHold = -Infinity;
+        });
     }
 
-    update() {
+    update(time, delta) {
         
         // handle player input
         if(this.cursorKeys.left.isDown) {
-            // console.log("go left");
+            this.playerSprite.body.setAccelerationX(-this.movement.acceleration);
         } 
         else if(this.cursorKeys.right.isDown) {
-            // console.log("go right");
+            this.playerSprite.body.setAccelerationX(this.movement.acceleration);
         } 
-        else {      
-            // console.log("go nowhere");
+        else {            
+            this.playerSprite.body.setAccelerationX(0);
+            this.playerSprite.body.setDragX(this.movement.drag);
         }
+        if (this.cursorKeys.up.isDown && this.timers.jumpHold > 0) {
+            this.playerSprite.body.setVelocityY(-this.movement.jumpVelocityMultiplier * this.timers.jumpHold);
+            this.timers.jumpHold -= delta;
+        }
+        if (this.playerSprite.body.onFloor() && this.cursorKeys.up.isUp) this.timers.jumpHold = this.timerStartValues.jumpHold;
     }
 }

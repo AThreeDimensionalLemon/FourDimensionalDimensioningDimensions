@@ -9,7 +9,11 @@ const game = new Phaser.Game({
         pixelArt: true  // prevent pixel art from getting blurred when scaled
     },
     physics: {
-        default: "arcade"
+        default: "arcade",
+        gravity: {
+            x: 0,
+            y: 1500
+        }
     },
     scale: {
         mode: Phaser.Scale.ScaleModes.FIT
