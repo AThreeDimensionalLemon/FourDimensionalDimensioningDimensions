@@ -23,7 +23,7 @@ class Level1 extends Phaser.Scene {
         this.movement = {
             maxSpeed: 500,
             acceleration: 500,
-            jumpVelocityMultiplier: 2.5, // multiplied with jump timer
+            jumpVelocity: 1000,
             drag: 1500
         }
 
@@ -67,12 +67,6 @@ class Level1 extends Phaser.Scene {
             }
         };
         this.activeSet = "spring";
-        this.timerStartValues = {
-            jumpHold: 500
-        }
-        this.timers = {
-            jumpHold: this.timerStartValues.jumpHold
-        }
 
         // setup world
         this.physics.world.gravity.y = 1500; // TODO: Get rid of this redundant call; theoretically already done in the instantiation of the game, but for some reason, this line is needed to make gravity go
@@ -144,15 +138,12 @@ class Level1 extends Phaser.Scene {
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.cursorKeys.up.on("down", () => {
             if (!this.playerSprite.body.onFloor()) return;
+            this.playerSprite.body.setVelocityY(-this.movement.jumpVelocity);
             let targetSet = 0;
             if (this.cursorKeys.left.isDown) targetSet = -1;
             else if (this.cursorKeys.right.isDown) targetSet = 1;
             else targetSet = 2;
             this.switchSet(targetSet);
-        });
-        this.cursorKeys.up.on("up", () => {
-            if (this.playerSprite.body.onFloor()) return;
-            this.jumpHold = -Infinity;
         });
     }
 
@@ -169,10 +160,5 @@ class Level1 extends Phaser.Scene {
             this.playerSprite.body.setAccelerationX(0);
             this.playerSprite.body.setDragX(this.movement.drag);
         }
-        if (this.cursorKeys.up.isDown && this.timers.jumpHold > 0) {
-            this.playerSprite.body.setVelocityY(-this.movement.jumpVelocityMultiplier * this.timers.jumpHold);
-            this.timers.jumpHold -= delta;
-        }
-        if (this.playerSprite.body.onFloor() && this.cursorKeys.up.isUp) this.timers.jumpHold = this.timerStartValues.jumpHold;
     }
 }
