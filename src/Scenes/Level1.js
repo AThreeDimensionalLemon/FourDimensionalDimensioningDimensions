@@ -3,6 +3,7 @@ class Level1 extends Phaser.Scene {
         super("level1");
     }
 
+    // TODO: Fix bug where collisions for the target set sometimes don't enable
     switchSet(targetIndexDifference) {
         for (const layer in this.sets[this.activeSet].layers) {
             if (this.sets[this.activeSet].layers[layer] != null) this.sets[this.activeSet].layers[layer].setVisible(false);
@@ -69,7 +70,7 @@ class Level1 extends Phaser.Scene {
         this.activeSet = "spring";
 
         // setup world
-        this.physics.world.gravity.y = 1500; // TODO: Get rid of this redundant call; theoretically already done in the instantiation of the game, but for some reason, this line is needed to make gravity go
+        this.physics.world.gravity.y = 1500; // TODO: Get rid of this redundant call; theoretically already done in the instantiation of the game, but for some reason, this line is needed to apply gravity
     }
 
     preload() {
@@ -132,7 +133,8 @@ class Level1 extends Phaser.Scene {
         this.playerSprite.body.setMaxVelocityX(this.movement.maxSpeed);
         
         // setup camera
-        this.cameras.main.setBounds(0, this.map.heightInPixels - game.config.height, game.config.width, game.config.height);
+        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        this.cameras.main.startFollow(this.playerSprite, true, 0.25, 0.25);
 
         // setup inputs
         this.cursorKeys = this.input.keyboard.createCursorKeys();
