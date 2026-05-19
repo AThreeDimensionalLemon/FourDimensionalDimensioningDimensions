@@ -71,6 +71,7 @@ class Level1 extends Phaser.Scene {
 
         // setup world
         this.physics.world.gravity.y = 1500; // TODO: Get rid of this redundant call; theoretically already done in the instantiation of the game, but for some reason, this line is needed to apply gravity
+        this.physics.world.TILE_BIAS = 48;
     }
 
     preload() {
@@ -88,6 +89,7 @@ class Level1 extends Phaser.Scene {
         // TODO: Animate player sprite; remember to add assets in create()
         // this.load.atlas("spritesheet_walk_player", "spritesheet_walk_player.png", "walk.json");
         this.load.image("tempSprite_walk_player");
+        this.load.image("sprite_walkParticle_player");
     }
 
     create() {
@@ -131,6 +133,59 @@ class Level1 extends Phaser.Scene {
             if (set != this.activeSet) this.sets[set].collider.active = false;
         }
         this.playerSprite.body.setMaxVelocityX(this.movement.maxSpeed);
+        this.runParticleEmitter = this.add.particles(0, 0, "sprite_walkParticle_player", {
+            frequency: 50,
+            emitting: false,
+            lifespan: {
+                min: 250,
+                max: 750,
+                random: true
+            },
+            rotate: {
+                min: 0,
+                max: 359,
+                random: true
+            },
+            scale: {
+                min: 0.1,
+                max: 0.125,
+                random: true
+            },
+            speedY: {
+                min: -25,
+                max: -50,
+                random: true
+            }
+        });
+        this.runParticleEmitter.startFollow(this.playerSprite, 0, this.playerSprite.height / 2);
+        this.jumpParticleEmitter = this.add.particles(0, 0, "sprite_walkParticle_player", {
+            emitting: false,
+            lifespan: {
+                min: 250,
+                max: 750,
+                random: true
+            },
+            rotate: {
+                min: 0,
+                max: 359,
+                random: true
+            },
+            scale: {
+                min: 0.1,
+                max: 0.125,
+                random: true
+            },
+            speedX: {
+                min: -250,
+                max: 250,
+                random: true,
+            },
+            speedY: {
+                min: -25,
+                max: -50,
+                random: true
+            }
+        });
         
         // setup camera
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
@@ -140,12 +195,14 @@ class Level1 extends Phaser.Scene {
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.cursorKeys.up.on("down", () => {
             if (!this.playerSprite.body.onFloor()) return;
+            this.jumpParticleEmitter.emitParticle(10, this.playerSprite.body.x + this.playerSprite.width / 2, this.playerSprite.body.y + this.playerSprite.height / 2);
             this.playerSprite.body.setVelocityY(-this.movement.jumpVelocity);
             let targetSet = 0;
             if (this.cursorKeys.left.isDown) targetSet = -1;
             else if (this.cursorKeys.right.isDown) targetSet = 1;
             else targetSet = 2;
             this.switchSet(targetSet);
+            this.runParticleEmitter.stop();
         });
     }
 
@@ -154,13 +211,16 @@ class Level1 extends Phaser.Scene {
         // handle player input
         if(this.cursorKeys.left.isDown) {
             this.playerSprite.body.setAccelerationX(-this.movement.acceleration);
+            if (this.playerSprite.body.onFloor()) this.runParticleEmitter.start();
         } 
         else if(this.cursorKeys.right.isDown) {
             this.playerSprite.body.setAccelerationX(this.movement.acceleration);
+            if (this.playerSprite.body.onFloor()) this.runParticleEmitter.start();
         } 
         else {            
             this.playerSprite.body.setAccelerationX(0);
             this.playerSprite.body.setDragX(this.movement.drag);
+            this.runParticleEmitter.stop();
         }
     }
 }
