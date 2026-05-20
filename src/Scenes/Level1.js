@@ -142,6 +142,21 @@ class Level1 extends Phaser.Scene {
             this.sets[set].layers.fore.setCollisionByProperty({ collides: true });
             this.sets[set].layers.fore.forEachTile((tile) => {
                 if ("isPlatform" in tile.properties) tile.setCollision(false, false, true, false);
+                if ("isExit" in tile.properties) tile.setCollisionCallback(() => {
+                    const endText = this.add.text(
+                        5000, 700,
+                        "Level complete!",
+                        {
+                            fontSize: 96,
+                            color: "#ffffff",
+                            align: "center"
+                        }
+                    );
+                    setTimeout(() => {
+                        endText.destroy();
+                        this.resetScene();
+                    }, 3000);
+                });
             });
             if (set != this.activeSet) {
                 for (const layer in this.sets[set].layers) {
@@ -164,6 +179,7 @@ class Level1 extends Phaser.Scene {
         //     repeat: -1
         // });
         this.playerSprite = this.physics.add.sprite(game.config.width / 2, this.map.heightInPixels - game.config.height / 4, "tempSprite_walk_player");
+        // this.playerSprite = this.physics.add.sprite(5600, 700, "tempSprite_walk_player");
         for (const set in this.sets) {
             this.sets[set].collider = this.physics.add.collider(this.playerSprite, this.sets[set].layers.fore);
             if (set != this.activeSet) this.sets[set].collider.active = false;
