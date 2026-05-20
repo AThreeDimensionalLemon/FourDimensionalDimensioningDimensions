@@ -34,9 +34,15 @@ class Level1 extends Phaser.Scene {
         this.sets[this.activeSet].collider.active = true;
     }
 
-    // TODO: Implement reseting of the level
     resetScene() {
-        console.log("reset level");
+        this.playerSprite.setPosition(game.config.width / 2, this.map.heightInPixels - game.config.height / 4);
+        this.playerSprite.body.setVelocity(0, 0);
+        this.createCoins();
+        switch(this.activeSet) {
+            case "summer": this.switchSet(-1); break;
+            case "fall": this.switchSet(2); break;
+            case "winter": this.switchSet(1); break;
+        }
     }
 
     init() {
