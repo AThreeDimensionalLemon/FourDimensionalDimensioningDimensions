@@ -3,7 +3,23 @@ class Level1 extends Phaser.Scene {
         super("level1");
     }
 
-    // TODO: Fix bug where collisions for the target set sometimes don't enable
+    createCoins() {
+        for (const coin of this.coins) {
+            coin.destroy();
+        }
+        this.coins = this.map.createFromObjects("objects", {
+            name: "coin",
+            key: "sprite_coin"
+        });
+        for (const coin of this.coins) {
+            this.physics.world.enable(coin, Phaser.Physics.Arcade.STATIC_BODY);
+            this.physics.add.overlap(this.playerSprite, coin, (obj1, obj2) => {
+                this.coinCollisionSound.play();
+                obj2.destroy();
+            })
+        }
+    }
+
     switchSet(targetIndexDifference) {
         for (const layer in this.sets[this.activeSet].layers) {
             if (this.sets[this.activeSet].layers[layer] != null) this.sets[this.activeSet].layers[layer].setVisible(false);
@@ -16,6 +32,11 @@ class Level1 extends Phaser.Scene {
             if (this.sets[this.activeSet].layers[layer] != null) this.sets[this.activeSet].layers[layer].setVisible(true); // TODO: Remove conditional statement after background layers are finished
         }
         this.sets[this.activeSet].collider.active = true;
+    }
+
+    // TODO: Implement reseting of the level
+    resetScene() {
+        console.log("reset level");
     }
 
     init() {
@@ -68,6 +89,7 @@ class Level1 extends Phaser.Scene {
             }
         };
         this.activeSet = "spring";
+        this.coins = [];
 
         // setup world
         this.physics.world.gravity.y = 1500; // TODO: Get rid of this redundant call; theoretically already done in the instantiation of the game, but for some reason, this line is needed to apply gravity
@@ -84,12 +106,17 @@ class Level1 extends Phaser.Scene {
         this.load.image("spritesheet_detail", "spritesheet_detail.png");
         this.load.tilemapTiledJSON("map");
 
+        // queue to-be-loaded coin assets
+        this.load.image("sprite_coin");
+        this.load.audio("sound_coin", "sound_coin.ogg");
+
         // queue to-be-loaded character assets
         this.load.setPath("./assets/player");
         // TODO: Animate player sprite; remember to add assets in create()
         // this.load.atlas("spritesheet_walk_player", "spritesheet_walk_player.png", "walk.json");
         this.load.image("tempSprite_walk_player");
         this.load.image("sprite_walkParticle_player");
+        this.load.audio("sound_walk_player", "sound_walk_player.ogg");
     }
 
     create() {
@@ -108,9 +135,7 @@ class Level1 extends Phaser.Scene {
             this.sets[set].layers.fore = this.map.createLayer(`fore_${set}`, terrainTileset);
             this.sets[set].layers.fore.setCollisionByProperty({ collides: true });
             this.sets[set].layers.fore.forEachTile((tile) => {
-                if ("isPlatform" in tile.properties) {
-                    tile.setCollision(false, false, true, false);
-                }
+                if ("isPlatform" in tile.properties) tile.setCollision(false, false, true, false);
             });
             if (set != this.activeSet) {
                 for (const layer in this.sets[set].layers) {
@@ -191,6 +216,11 @@ class Level1 extends Phaser.Scene {
                 random: true
             }
         });
+        this.playerWalkSound = this.sound.add("sound_walk_player");
+
+        // create coins
+        this.coinCollisionSound = this.sound.add("sound_coin");
+        this.createCoins();
         
         // setup camera
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
@@ -209,6 +239,10 @@ class Level1 extends Phaser.Scene {
             this.switchSet(targetSet);
             this.runParticleEmitter.stop();
         });
+        this.resetKey = this.input.keyboard.addKey("R");
+        this.resetKey.on("down", () => {
+            this.resetScene();
+        });
     }
 
     update(time, delta) {
@@ -216,11 +250,17 @@ class Level1 extends Phaser.Scene {
         // handle player input
         if(this.cursorKeys.left.isDown) {
             this.playerSprite.body.setAccelerationX(-this.movement.acceleration);
-            if (this.playerSprite.body.onFloor()) this.runParticleEmitter.start();
+            if (this.playerSprite.body.onFloor()) {
+                this.runParticleEmitter.start();
+                if (!this.playerWalkSound.isPlaying) this.playerWalkSound.play();
+            }
         } 
         else if(this.cursorKeys.right.isDown) {
             this.playerSprite.body.setAccelerationX(this.movement.acceleration);
-            if (this.playerSprite.body.onFloor()) this.runParticleEmitter.start();
+            if (this.playerSprite.body.onFloor()) {
+                this.runParticleEmitter.start();
+                if (!this.playerWalkSound.isPlaying) this.playerWalkSound.play();
+            }
         } 
         else {            
             this.playerSprite.body.setAccelerationX(0);
