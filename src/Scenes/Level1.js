@@ -82,7 +82,7 @@ class Level1 extends Phaser.Scene {
             this.load.image(`spritesheet_terrain_${set}`, `spritesheet_terrain_${set}.png`);
         }
         this.load.image("spritesheet_detail", "spritesheet_detail.png");
-        this.load.tilemapTiledJSON("map", "map.json");
+        this.load.tilemapTiledJSON("map");
 
         // queue to-be-loaded character assets
         this.load.setPath("./assets/player");
@@ -94,7 +94,7 @@ class Level1 extends Phaser.Scene {
 
     create() {
 
-        // create map visuals
+        // create map
         this.map = this.add.tilemap("map");
         const detailTileset = this.map.addTilesetImage("detail", "spritesheet_detail");
         for (const set in this.sets) {
@@ -107,6 +107,11 @@ class Level1 extends Phaser.Scene {
             this.sets[set].layers.det = this.map.createLayer(`det_${set}`, detailTileset);
             this.sets[set].layers.fore = this.map.createLayer(`fore_${set}`, terrainTileset);
             this.sets[set].layers.fore.setCollisionByProperty({ collides: true });
+            this.sets[set].layers.fore.forEachTile((tile) => {
+                if ("isPlatform" in tile.properties) {
+                    tile.setCollision(false, false, true, false);
+                }
+            });
             if (set != this.activeSet) {
                 for (const layer in this.sets[set].layers) {
                     if (this.sets[set].layers[layer] != null) this.sets[set].layers[layer].setVisible(false); // TODO: Remove conditional statement after background layers are finished

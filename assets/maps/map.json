@@ -507,6 +507,11 @@
                          "name":"collides",
                          "type":"bool",
                          "value":true
+                        }, 
+                        {
+                         "name":"isPlatform",
+                         "type":"bool",
+                         "value":true
                         }]
                 }, 
                 {
